@@ -29,4 +29,27 @@ public class PessoaService {
     public Pessoa salvar(Pessoa pessoa) {
         return repository.save(pessoa);
     }
+
+    @Transactional
+    public Pessoa atualizar(Long id, Pessoa pessoaAtualizada) {
+        Pessoa existente = buscarPorId(id);
+        existente.setTipo(pessoaAtualizada.getTipo());
+        existente.setNome(pessoaAtualizada.getNome());
+        existente.setDocumento(pessoaAtualizada.getDocumento());
+        existente.setInscricaoEstadual(pessoaAtualizada.getInscricaoEstadual());
+        existente.setEndereco(pessoaAtualizada.getEndereco());
+        existente.setCidade(pessoaAtualizada.getCidade());
+        existente.setUf(pessoaAtualizada.getUf());
+        existente.setCep(pessoaAtualizada.getCep());
+        existente.setTelefone(pessoaAtualizada.getTelefone());
+        existente.setEmail(pessoaAtualizada.getEmail());
+        existente.setContato(pessoaAtualizada.getContato());
+        return repository.save(existente);
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        Pessoa existente = buscarPorId(id);
+        repository.delete(existente);
+    }
 }

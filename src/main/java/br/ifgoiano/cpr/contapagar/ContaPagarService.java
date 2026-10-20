@@ -25,7 +25,14 @@ public class ContaPagarService {
     }
 
     @Transactional(readOnly = true)
-    public List<ContaPagar> listarTodas() {
+    public List<ContaPagar> listar(LocalDate inicio, LocalDate fim, SituacaoConta situacao) {
+        if (inicio != null && fim != null && situacao != null) {
+            return repository.findByVencimentoBetweenAndSituacao(inicio, fim, situacao);
+        } else if (inicio != null && fim != null) {
+            return repository.findByVencimentoBetween(inicio, fim);
+        } else if (situacao != null) {
+            return repository.findBySituacao(situacao);
+        }
         return repository.findAll();
     }
 
@@ -39,9 +46,43 @@ public class ContaPagarService {
     public ContaPagar lancar(ContaPagar conta) {
         pessoaService.buscarPorId(conta.getPessoa().getId());
         planoContaService.buscarPorId(conta.getPlanoConta().getId());
-        
         conta.setSituacao(SituacaoConta.ABERTA);
         return repository.save(conta);
+    }
+
+    @Transactional
+    public ContaPagar atualizar(Long id, ContaPagar contaAtualizada) {
+        ContaPagar existente = buscarPorId(id);
+        
+        if (existente.getSituacao() == SituacaoConta.PAGA) {
+            throw new NegocioException("Não é possível alterar uma conta já paga.");
+        }
+
+        pessoaService.buscarPorId(contaAtualizada.getPessoa().getId());
+        planoContaService.buscarPorId(contaAtualizada.getPlanoConta().getId());
+
+        existente.setNumeroTitulo(contaAtualizada.getNumeroTitulo());
+        existente.setPessoa(contaAtualizada.getPessoa());
+        existente.setPlanoConta(contaAtualizada.getPlanoConta());
+        existente.setTipoTitulo(contaAtualizada.getTipoTitulo());
+        existente.setValor(contaAtualizada.getValor());
+        existente.setEmissao(contaAtualizada.getEmissao());
+        existente.setVencimento(contaAtualizada.getVencimento());
+        existente.setDesconto(contaAtualizada.getDesconto());
+        existente.setValidadeDesc(contaAtualizada.getValidadeDesc());
+        existente.setAcrescimo(contaAtualizada.getAcrescimo());
+        existente.setObservacao(contaAtualizada.getObservacao());
+
+        return repository.save(existente);
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        ContaPagar existente = buscarPorId(id);
+        if (existente.getSituacao() == SituacaoConta.PAGA) {
+            throw new NegocioException("Não é possível excluir uma conta já paga.");
+        }
+        repository.delete(existente);
     }
 
     @Transactional

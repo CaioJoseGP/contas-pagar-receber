@@ -2,6 +2,8 @@ package br.ifgoiano.cpr.pessoa;
 
 import br.ifgoiano.cpr.shared.enums.TipoPessoa;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
@@ -9,18 +11,21 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class Pessoa {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 15)
     private TipoPessoa tipo;
 
+    @NotBlank
     @Column(nullable = false, length = 100)
     private String nome;
 
+    @NotBlank
     @Column(nullable = false, unique = true, length = 18)
     private String documento;
 

@@ -1,9 +1,11 @@
 package br.ifgoiano.cpr.shared.dto;
 
+import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class QuitacaoRequest {
+    @NotNull
     private LocalDate data;
     private BigDecimal desconto;
     private BigDecimal acrescimo;

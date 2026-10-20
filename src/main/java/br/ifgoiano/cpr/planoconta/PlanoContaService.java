@@ -29,4 +29,20 @@ public class PlanoContaService {
     public PlanoConta salvar(PlanoConta planoConta) {
         return repository.save(planoConta);
     }
+
+    @Transactional
+    public PlanoConta atualizar(Long id, PlanoConta planoContaAtualizado) {
+        PlanoConta existente = buscarPorId(id);
+        existente.setCodigo(planoContaAtualizado.getCodigo());
+        existente.setDescricao(planoContaAtualizado.getDescricao());
+        existente.setSuperior(planoContaAtualizado.getSuperior());
+        existente.setConsolidada(planoContaAtualizado.getConsolidada());
+        return repository.save(existente);
+    }
+
+    @Transactional
+    public void excluir(Long id) {
+        PlanoConta existente = buscarPorId(id);
+        repository.delete(existente);
+    }
 }

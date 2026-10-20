@@ -1,5 +1,6 @@
 package br.ifgoiano.cpr.pessoa;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,18 @@ public class PessoaController {
     }
 
     @PostMapping
-    public ResponseEntity<Pessoa> salvar(@RequestBody Pessoa pessoa) {
+    public ResponseEntity<Pessoa> salvar(@Valid @RequestBody Pessoa pessoa) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.salvar(pessoa));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Pessoa> atualizar(@PathVariable Long id, @Valid @RequestBody Pessoa pessoa) {
+        return ResponseEntity.ok(service.atualizar(id, pessoa));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }
