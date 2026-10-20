@@ -17,4 +17,4 @@ Siga este passo a passo simples para rodar a aplicação:
 **1. Clone o repositório (ou extraia os arquivos do projeto na sua máquina)**
 Abra o terminal e digite:
 ```bash
-git clone [https://github.com/caiojosegp/contas-pagar-receber.git](https://github.com/caiojosegp/contas-pagar-receber.git)
+git clone https://github.com/caiojosegp/contas-pagar-receber.git
