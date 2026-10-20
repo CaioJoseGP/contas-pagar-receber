@@ -2,6 +2,8 @@ package br.ifgoiano.cpr.shared.exception;
 
 import br.ifgoiano.cpr.shared.dto.ErroResposta;
 import jakarta.persistence.EntityNotFoundException;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -54,5 +56,18 @@ public class ApiExceptionHandler {
                 campos
         );
         return ResponseEntity.status(400).body(erro);
+    }
+
+    // Erro 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErroResposta> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        ErroResposta erro = new ErroResposta(
+                LocalDateTime.now(),
+                409,
+                "CONFLITO_DE_DADOS",
+                "Erro de integridade. Você pode estar tentando cadastrar um dado que já existe no sistema e deve ser único (ex: código, documento ou número de título).",
+                null
+        );
+        return ResponseEntity.status(409).body(erro);
     }
 }
