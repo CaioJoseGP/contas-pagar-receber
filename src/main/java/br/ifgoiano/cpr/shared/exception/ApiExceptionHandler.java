@@ -58,7 +58,7 @@ public class ApiExceptionHandler {
         return ResponseEntity.status(400).body(erro);
     }
 
-    // Erro 
+    // Erro 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErroResposta> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         ErroResposta erro = new ErroResposta(
